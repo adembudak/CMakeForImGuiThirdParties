@@ -111,14 +111,14 @@ if(implot3d)
   endif()
   cmake_path(SET _implot3d_dir ${IMPLOT3D_SOURCE_DIR})
 
-  add_library(implot3d)
-  target_sources(implot3d
+  add_library(ImPlot3D)
+  target_sources(ImPlot3D
     PRIVATE ${_implot3d_dir}/implot3d.cpp ${_implot3d_dir}/implot3d_items.cpp ${_implot3d_dir}/implot3d_meshes.cpp ${_implot3d_dir}/implot3d_demo.cpp
     PUBLIC FILE_SET implot3d_set
     BASE_DIRS ${_implot3d_dir}
     TYPE HEADERS
     FILES ${_implot3d_dir}/implot3d.h ${_implot3d_dir}/implot3d_internal.h)
-  target_link_libraries(implot3d PUBLIC ImGui::Core)
+  target_link_libraries(ImPlot3D PUBLIC ImGui::Core)
 endif()
 
 if(imguifiledialog)
@@ -171,7 +171,7 @@ if(install)
 
   if(implot3d)
     install(EXPORT implot3d_export DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/ImPlot3D NAMESPACE Unofficial::ImPlot3D:: FILE ImPlot3DConfig.cmake EXPORT_PACKAGE_DEPENDENCIES)
-    install(TARGETS implot3d EXPORT implot3d_export FILE_SET implot3d_set)
+    install(TARGETS ImPlot3D EXPORT implot3d_export FILE_SET implot3d_set)
     install(FILES ${_implot3d_dir}/LICENSE DESTINATION ${CMAKE_INSTALL_DATADIR}/ImPlot3D)
   endif()
 

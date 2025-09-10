@@ -11,7 +11,7 @@ find_package(ImGuiFileDialog REQUIRED)
 add_executable(a a.cpp)
 target_link_libraries(a
   PRIVATE Unofficial::ImPlot::ImPlot
-  PRIVATE Unofficial::ImPlot3D::implot3d
+  PRIVATE Unofficial::ImPlot3D::ImPlot3D
   PRIVATE Unofficial::imgui_markdown::imgui_markdown
   PRIVATE Unofficial::imgui_club::imgui_club
   PRIVATE Unofficial::ImGuiFileDialog::imguifiledialog)

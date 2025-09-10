@@ -142,6 +142,7 @@ jobs:
           -S ${{ github.workspace }}/CMakeForImGuiThirdParties
           -B ${{ github.workspace }}/build
           -D DearImGui_DIR=${{ github.workspace }}/installed.in.here/lib/cmake/DearImGui
+          -D CMAKE_INSTALL_PREFIX=${{ github.workspace }}/installed.in.there
           -D imgui_club=ON -D imgui_memory_editor=ON -D imgui_multicontext_compositor=ON -D imgui_threaded_rendering=ON -D IMGUI_CLUB_SOURCE_DIR=$PWD/imgui_club
           -D implot=ON -D IMPLOT_SOURCE_DIR=$PWD/implot
           -D imgui_markdown=ON -D IMGUI_MARKDOWN_SOURCE_DIR=$PWD/imgui_markdown
@@ -154,11 +155,18 @@ jobs:
           --build ${{ github.workspace }}/build
           --config ${{ matrix.build-type }}
 
+      - name: Install thirdparties
+        run: >
+          cmake
+          --build ${{ github.workspace }}/build
+          --target install
+          --config ${{ matrix.build-type }}
+
       - name: Upload
         uses: actions/upload-artifact@v4
 
         with:
           name: build.imgui-${{ matrix.tag }}.${{ matrix.os }}.${{ matrix.triplet }}.${{ matrix.build-type }}
-          path: ${{ github.workspace }}/build/
+          path: ${{ github.workspace }}/installed.in.there
 
       - run: echo "Job exited by ${{ job.status }}."

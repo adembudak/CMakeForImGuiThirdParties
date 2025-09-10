@@ -141,6 +141,7 @@ jobs:
           cmake
           -S ${{ github.workspace }}/CMakeForImGuiThirdParties
           -B ${{ github.workspace }}/build
+          -G "${{ matrix.generator }}"
           -D DearImGui_DIR=${{ github.workspace }}/installed.in.here/lib/cmake/DearImGui
           -D CMAKE_INSTALL_PREFIX=${{ github.workspace }}/installed.in.there
           -D imgui_club=ON -D imgui_memory_editor=ON -D imgui_multicontext_compositor=ON -D imgui_threaded_rendering=ON -D IMGUI_CLUB_SOURCE_DIR=$PWD/imgui_club
@@ -161,6 +162,21 @@ jobs:
           --build ${{ github.workspace }}/build
           --target install
           --config ${{ matrix.build-type }}
+
+      - name: Test the test
+        shell: bash
+        run: >
+          cmake
+          -S ${{ github.workspace }}/CMakeForImGuiThirdParties/test
+          -B ${{ github.workspace }}/CMakeForImGuiThirdParties/test/build
+          -G "${{ matrix.generator }}"
+          -D imgui_club_DIR=${{ github.workspace }}/installed.in.there/lib/cmake/imgui_club
+          -D imgui_markdown_DIR=${{ github.workspace }}/installed.in.there/lib/cmake/imgui_markdown
+          -D ImPlot_DIR=${{ github.workspace }}/installed.in.there/lib/cmake/ImPlot
+          -D ImPlot3D_DIR=${{ github.workspace }}/installed.in.there/lib/cmake/ImPlot3D
+          -D ImGuiFileDialog_DIR=${{ github.workspace }}/installed.in.there/lib/cmake/ImGuiFileDialog
+          ;
+          cmake --build ${{ github.workspace }}/build --config ${{ matrix.build-type }}
 
       - name: Upload
         uses: actions/upload-artifact@v4

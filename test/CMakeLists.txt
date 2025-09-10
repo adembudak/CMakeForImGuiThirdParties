@@ -9,8 +9,8 @@ find_package(imgui_club CONFIG REQUIRED)
 find_package(ImGuiFileDialog CONFIG REQUIRED)
 find_package(ImGuizmo CONFIG REQUIRED)
 
-add_executable(a a.cpp)
-target_link_libraries(a
+add_executable(test main.cpp)
+target_link_libraries(test
   PRIVATE Unofficial::ImPlot::ImPlot
   PRIVATE Unofficial::ImPlot3D::ImPlot3D
   PRIVATE Unofficial::imgui_markdown::imgui_markdown

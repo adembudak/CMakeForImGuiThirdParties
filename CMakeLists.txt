@@ -21,15 +21,11 @@ find_package(DearImGui CONFIG REQUIRED)
 
 message(STATUS "DearImGui Version ${DearImGui_VERSION}")
 
-option(imgui_club "" OFF)
-option(imgui_markdown "" OFF)
-option(implot "" OFF)
-option(implot3d "" OFF)
-option(imguifiledialog "" OFF)
-
-cmake_dependent_option(implot "" OFF ${DearImGui_VERSION} VERSION_GREATER 18900 OFF)
-cmake_dependent_option(implot3d "" OFF ${DearImGui_VERSION} VERSION_GREATER 19000 OFF)
-cmake_dependent_option(imguifiledialog "" OFF ${DearImGui_VERSION} VERSION_GREATER 19200 OFF)
+option(imgui_club "https://github.com/ocornut/imgui_club" OFF)
+option(imgui_markdown "https://github.com/enkisoftware/imgui_markdown" OFF)
+cmake_dependent_option(implot "https://github.com/epezent/implot" OFF ${DearImGui_VERSION} VERSION_GREATER 18900 OFF)
+cmake_dependent_option(implot3d "https://github.com/brenocq/implot3d" OFF ${DearImGui_VERSION} VERSION_GREATER 19000 OFF)
+cmake_dependent_option(imguifiledialog "https://github.com/aiekick/ImGuiFileDialog" OFF ${DearImGui_VERSION} VERSION_GREATER 19200 OFF)
 
 cmake_dependent_option(imgui_memory_editor "" OFF imgui_club OFF)
 cmake_dependent_option(imgui_multicontext_compositor "" OFF "imgui_club AND (${DearImGui_VERSION} VERSION_GREATER 19080)" OFF)

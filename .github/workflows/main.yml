@@ -156,6 +156,13 @@ jobs:
           --build ${{ github.workspace }}/build
           --config ${{ matrix.build-type }}
 
+      - name: Fix install paths on Windows again
+        if: matrix.os == 'windows-latest'
+        run: >
+          (Get-Content -Path "${{ github.workspace }}\\build\\cmake_install.cmake")
+          | ForEach-Object {$_ -replace 'D:\\a\\CMakeForImGuiThirdParties\\', 'D:/a/CMakeForImGuiThirdParties/'}
+          | Set-Content -Path "${{ github.workspace }}\\build\\cmake_install.cmake"
+
       - name: Install thirdparties
         run: >
           cmake
@@ -163,20 +170,22 @@ jobs:
           --target install
           --config ${{ matrix.build-type }}
 
-      - name: Test the test
-        shell: bash
+      - name: Configure test
         run: >
           cmake
           -S ${{ github.workspace }}/CMakeForImGuiThirdParties/test
           -B ${{ github.workspace }}/CMakeForImGuiThirdParties/test/build
           -G "${{ matrix.generator }}"
+          -D DearImGui_DIR=${{ github.workspace }}/installed.in.here/lib/cmake/DearImGui
           -D imgui_club_DIR=${{ github.workspace }}/installed.in.there/lib/cmake/imgui_club
           -D imgui_markdown_DIR=${{ github.workspace }}/installed.in.there/lib/cmake/imgui_markdown
           -D ImPlot_DIR=${{ github.workspace }}/installed.in.there/lib/cmake/ImPlot
           -D ImPlot3D_DIR=${{ github.workspace }}/installed.in.there/lib/cmake/ImPlot3D
           -D ImGuiFileDialog_DIR=${{ github.workspace }}/installed.in.there/lib/cmake/ImGuiFileDialog
-          ;
-          cmake --build ${{ github.workspace }}/build --config ${{ matrix.build-type }}
+
+      - name: Build test
+        run:
+          cmake --build ${{ github.workspace }}/CMakeForImGuiThirdParties/test/build --config ${{ matrix.build-type }}
 
       - name: Upload
         uses: actions/upload-artifact@v4

@@ -45,9 +45,10 @@ if(imgui_club)
   endif()
   cmake_path(SET _imgui_club_dir ${IMGUI_CLUB_SOURCE_DIR})
 
+  add_library(imgui_club)
+
   if(imgui_memory_editor)
-    add_library(imgui_memory_editor INTERFACE)
-    target_sources(imgui_memory_editor
+    target_sources(imgui_club
       INTERFACE FILE_SET imgui_memory_editor_set
       BASE_DIRS ${_imgui_club_dir}/imgui_memory_editor
       TYPE HEADERS
@@ -55,26 +56,23 @@ if(imgui_club)
   endif()
 
   if(imgui_multicontext_compositor)
-    add_library(imgui_multicontext_compositor)
-    target_sources(imgui_multicontext_compositor
+    target_sources(imgui_club
       PRIVATE ${_imgui_club_dir}/imgui_multicontext_compositor/imgui_multicontext_compositor.cpp
       PUBLIC FILE_SET imgui_multicontext_compositor_set
       BASE_DIRS ${_imgui_club_dir}/imgui_multicontext_compositor
       TYPE HEADERS
       FILES ${_imgui_club_dir}/imgui_multicontext_compositor/imgui_multicontext_compositor.h)
-    target_link_libraries(imgui_multicontext_compositor PUBLIC ImGui::Core)
-
-    list(APPEND imgui_thirdparty_list imgui_multicontext_compositor)
  endif()
 
   if(imgui_threaded_rendering)
-    add_library(imgui_threaded_rendering INTERFACE)
-    target_sources(imgui_threaded_rendering
+    target_sources(imgui_club
       INTERFACE FILE_SET imgui_threaded_rendering_set
       BASE_DIRS ${_imgui_club_dir}/imgui_threaded_rendering
       TYPE HEADERS
       FILES ${_imgui_club_dir}/imgui_threaded_rendering/imgui_threaded_rendering.h)
   endif()
+
+  target_link_libraries(imgui_club PUBLIC ImGui::Core)
 endif()
 
 if(imgui_markdown)
@@ -105,8 +103,6 @@ if(implot)
     TYPE HEADERS
     FILES ${_implot_dir}/implot.h ${_implot_dir}/implot_internal.h)
   target_link_libraries(implot PUBLIC ImGui::Core)
-
-  list(APPEND imgui_thirdparty_list implot)
 endif()
 
 if(implot3d)
@@ -123,8 +119,6 @@ if(implot3d)
     TYPE HEADERS
     FILES ${_implot3d_dir}/implot3d.h ${_implot3d_dir}/implot3d_internal.h)
   target_link_libraries(implot3d PUBLIC ImGui::Core)
-
-  list(APPEND imgui_thirdparty_list implot3d)
 endif()
 
 if(imguifiledialog)
@@ -159,19 +153,7 @@ if(install)
 
   if(imgui_club)
     install(EXPORT imgui_club_export DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/imgui_club NAMESPACE Unofficial::imgui_club:: FILE imgui_club-config.cmake EXPORT_PACKAGE_DEPENDENCIES)
-
-    if(imgui_threaded_rendering)
-      install(TARGETS imgui_threaded_rendering EXPORT imgui_club_export FILE_SET imgui_threaded_rendering_set)
-    endif()
-
-    if(imgui_memory_editor)
-      install(TARGETS imgui_memory_editor EXPORT imgui_club_export FILE_SET imgui_memory_editor_set)
-    endif()
-
-    if(imgui_multicontext_compositor)
-      install(TARGETS imgui_multicontext_compositor EXPORT imgui_club_export FILE_SET imgui_multicontext_compositor_set)
-    endif()
-
+    install(TARGETS imgui_club EXPORT imgui_club_export FILE_SET imgui_threaded_rendering_set FILE_SET imgui_memory_editor_set FILE_SET imgui_multicontext_compositor_set)
     install(FILES ${_imgui_club_dir}/LICENSE.txt DESTINATION ${CMAKE_INSTALL_DATADIR}/imgui_club)
   endif()
 

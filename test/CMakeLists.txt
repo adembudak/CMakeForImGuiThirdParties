@@ -13,7 +13,5 @@ target_link_libraries(a
   PRIVATE Unofficial::ImPlot::implot
   PRIVATE Unofficial::ImPlot3D::implot3d
   PRIVATE Unofficial::imgui_markdown::imgui_markdown
-  PRIVATE Unofficial::imgui_club::imgui_memory_editor
-  PRIVATE Unofficial::imgui_club::imgui_threaded_rendering
-  PRIVATE Unofficial::imgui_club::imgui_multicontext_compositor
+  PRIVATE Unofficial::imgui_club::imgui_club
   PRIVATE Unofficial::ImGuiFileDialog::imguifiledialog)

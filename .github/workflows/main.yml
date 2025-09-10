@@ -11,7 +11,7 @@ on:
       - '.github/depandabot.yml'
 
 jobs:
-  Configure-Build-Install-Uninstall-Package-Upload:
+  Configure-Build-Install-Upload:
     strategy:
       matrix:
           os:
@@ -44,16 +44,17 @@ jobs:
         with:
           cmake-version: '4.0.0'
 
-      - name: Check out ImGui repository
-        uses: actions/checkout@v4
+      - name: Check out the Dear ImGui repository
+        uses: actions/checkout@v5
         with:
           repository: ocornut/imgui
           show-progress: false
           path: imgui
 
       - name: Check out CMakeForImGui
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
+          repository: adembudak/CMakeForImGui
           show-progress: false
           path: CMakeForImGui
 
@@ -63,7 +64,8 @@ jobs:
           -S ${{ github.workspace }}/CMakeForImGui
           -B ${{ github.workspace }}/build
           -G "${{ matrix.generator }}"
-          -D CMAKE_INSTALL_PREFIX=${{ github.workspace }}/install.in.here
+          -D IMGUI_SOURCE_DIR=${{ github.workspace }}/imgui
+          -D CMAKE_INSTALL_PREFIX=${{ github.workspace }}/installed.in.here
 
       - name: Build
         run: >
@@ -85,43 +87,72 @@ jobs:
           --target install
           --config ${{ matrix.build-type }}
 
+      - name: Remove build folder
+        run: cmake -E rm -rf build
+
+      - name: Checkout imgui_club
+        uses: actions/checkout@v5
+        with:
+          repository: ocornut/imgui_club
+          show-progress: false
+          path: imgui_club
+
+      - name: Checkout imgui_markdown
+        uses: actions/checkout@v5
+        with:
+          repository: enkisoftware/imgui_markdown
+          show-progress: false
+          path: imgui_markdown
+
       - name: Checkout ImPlot
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: epezent/implot
           show-progress: false
           path: implot
 
       - name: Checkout ImPlot3D
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: brenocq/implot3d
           show-progress: false
           path: implot3d
 
       - name: Checkout ImGuiFileDialog
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: aiekick/ImGuiFileDialog
           show-progress: false
           path: ImGuiFileDialog
 
-      - name: Checkout imgui_club
-        uses: actions/checkout@v4
+      - name: Check out CMakeForImGuiThirdParties
+        uses: actions/checkout@v5
         with:
-          repository: ocornut/imgui_club
+          repository: ${{ github.repository }}
           show-progress: false
-          path: imgui_club
+          path: CMakeForImGuiThirdParties
 
-      - name: Configure configure CMakeForImGui enabled thirdparties
+      - name: List what is in here
+        shell: bash
+        run: ls -1 -p
+
+      - name: Configure thirdparties
         run: >
           cmake
-          -S ${{ github.workspace }}/CMakeForImGui
+          -S ${{ github.workspace }}/CMakeForImGuiThirdParties
           -B ${{ github.workspace }}/build
-          -D thirdparty=ON
+          -D DearImGui_DIR=${{ github.workspace }}/installed.in.here/lib/cmake/DearImGui
+          -D imgui_club=ON -D imgui_memory_editor=ON -D imgui_multicontext_compositor=ON -D imgui_threaded_rendering=ON -D IMGUI_CLUB_SOURCE_DIR=$PWD/imgui_club
           -D implot=ON -D IMPLOT_SOURCE_DIR=$PWD/implot
+          -D imgui_markdown=ON -D IMGUI_MARKDOWN_SOURCE_DIR=$PWD/imgui_markdown
           -D implot3d=ON -D IMPLOT3D_SOURCE_DIR=$PWD/implot3d
           -D imguifiledialog=ON -D IMGUIFILEDIALOG_SOURCE_DIR=$PWD/ImGuiFileDialog
+
+      - name: Build thirdparties
+        run: >
+          cmake
+          --build ${{ github.workspace }}/build
+          --config ${{ matrix.build-type }}
 
       - name: Upload
         uses: actions/upload-artifact@v4

@@ -1,0 +1,133 @@
+name: GitHub Actions
+run-name: ${{ github.actor }} is testing out ${{ github.repository }}
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - 'README.md'
+      - 'LICENSE.md'
+      - '.github/depandabot.yml'
+
+jobs:
+  Configure-Build-Install-Uninstall-Package-Upload:
+    strategy:
+      matrix:
+          os:
+            - ubuntu-latest
+            - macos-15
+            - windows-latest
+
+          include:
+            - os: ubuntu-latest
+              generator: 'Unix Makefiles'
+              triplet: x64-linux
+
+            - os: macos-15
+              generator: 'Ninja Multi-Config'
+              triplet: x64-osx
+
+            - os: windows-latest
+              generator: 'Visual Studio 17 2022'
+              triplet: x64-windows
+
+          build-type:
+            - Debug
+
+    runs-on: ${{ matrix.os }}
+    steps:
+      - run: echo "Triggered by ${{ github.event_name }} on ${{ github.repository }} using ${{ github.ref}} branch and running on ${{ runner.os }}."
+
+      - name: Setup CMake
+        uses: jwlawson/actions-setup-cmake@v2
+        with:
+          cmake-version: '4.0.0'
+
+      - name: Check out ImGui repository
+        uses: actions/checkout@v4
+        with:
+          repository: ocornut/imgui
+          show-progress: false
+          path: imgui
+
+      - name: Check out CMakeForImGui
+        uses: actions/checkout@v4
+        with:
+          show-progress: false
+          path: CMakeForImGui
+
+      - name: Configure
+        run: >
+          cmake
+          -S ${{ github.workspace }}/CMakeForImGui
+          -B ${{ github.workspace }}/build
+          -G "${{ matrix.generator }}"
+          -D CMAKE_INSTALL_PREFIX=${{ github.workspace }}/install.in.here
+
+      - name: Build
+        run: >
+          cmake
+          --build ${{ github.workspace }}/build
+          --config ${{ matrix.build-type }}
+
+      - name: Fix install paths on Windows
+        if: matrix.os == 'windows-latest'
+        run: >
+          (Get-Content -Path "${{ github.workspace }}\\build\\cmake_install.cmake")
+          | ForEach-Object {$_ -replace 'D:\\a\\CMakeForImGui\\', 'D:/a/CMakeForImGui/'}
+          | Set-Content -Path "${{ github.workspace }}\\build\\cmake_install.cmake"
+
+      - name: Install
+        run: >
+          cmake
+          --build ${{ github.workspace }}/build
+          --target install
+          --config ${{ matrix.build-type }}
+
+      - name: Checkout ImPlot
+        uses: actions/checkout@v4
+        with:
+          repository: epezent/implot
+          show-progress: false
+          path: implot
+
+      - name: Checkout ImPlot3D
+        uses: actions/checkout@v4
+        with:
+          repository: brenocq/implot3d
+          show-progress: false
+          path: implot3d
+
+      - name: Checkout ImGuiFileDialog
+        uses: actions/checkout@v4
+        with:
+          repository: aiekick/ImGuiFileDialog
+          show-progress: false
+          path: ImGuiFileDialog
+
+      - name: Checkout imgui_club
+        uses: actions/checkout@v4
+        with:
+          repository: ocornut/imgui_club
+          show-progress: false
+          path: imgui_club
+
+      - name: Configure configure CMakeForImGui enabled thirdparties
+        run: >
+          cmake
+          -S ${{ github.workspace }}/CMakeForImGui
+          -B ${{ github.workspace }}/build
+          -D thirdparty=ON
+          -D implot=ON -D IMPLOT_SOURCE_DIR=$PWD/implot
+          -D implot3d=ON -D IMPLOT3D_SOURCE_DIR=$PWD/implot3d
+          -D imguifiledialog=ON -D IMGUIFILEDIALOG_SOURCE_DIR=$PWD/ImGuiFileDialog
+
+      - name: Upload
+        uses: actions/upload-artifact@v4
+
+        with:
+          name: build.imgui-${{ matrix.tag }}.${{ matrix.os }}.${{ matrix.triplet }}.${{ matrix.build-type }}
+          path: ${{ github.workspace }}/build/
+
+      - run: echo "Job exited by ${{ job.status }}."

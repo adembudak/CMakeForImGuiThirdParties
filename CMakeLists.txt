@@ -51,7 +51,11 @@ if(imgui_club)
 
   if(imgui_memory_editor)
     add_library(imgui_memory_editor INTERFACE)
-    target_sources(imgui_memory_editor INTERFACE FILE_SET imgui_memory_editor_set BASE_DIRS ${_imgui_club_dir}/imgui_memory_editor TYPE HEADERS FILES ${_imgui_club_dir}/imgui_memory_editor/imgui_memory_editor.h)
+    target_sources(imgui_memory_editor
+      INTERFACE FILE_SET imgui_memory_editor_set
+      BASE_DIRS ${_imgui_club_dir}/imgui_memory_editor
+      TYPE HEADERS
+      FILES ${_imgui_club_dir}/imgui_memory_editor/imgui_memory_editor.h)
   endif()
 
   if(imgui_multicontext_compositor)
@@ -69,7 +73,11 @@ if(imgui_club)
 
   if(imgui_threaded_rendering)
     add_library(imgui_threaded_rendering INTERFACE)
-    target_sources(imgui_threaded_rendering INTERFACE FILE_SET imgui_threaded_rendering_set BASE_DIRS ${_imgui_club_dir}/imgui_threaded_rendering TYPE HEADERS FILES ${_imgui_club_dir}/imgui_threaded_rendering/imgui_threaded_rendering.h)
+    target_sources(imgui_threaded_rendering
+      INTERFACE FILE_SET imgui_threaded_rendering_set
+      BASE_DIRS ${_imgui_club_dir}/imgui_threaded_rendering
+      TYPE HEADERS
+      FILES ${_imgui_club_dir}/imgui_threaded_rendering/imgui_threaded_rendering.h)
   endif()
 endif()
 
@@ -77,10 +85,14 @@ if(imgui_markdown)
   if(NOT IMGUI_MARKDOWN_SOURCE_DIR)
     message(FATAL_ERROR "set IMGUI_MARKDOWN_SOURCE_DIR to proceed:\ne.g. cmake -DIMGUI_MARKDOWN_SOURCE_DIR=path.to.imgui_markdown...")
   endif()
-  cmake_path(SET _immarkdown_dir ${IMGUI_MARKDOWN_SOURCE_DIR})
+  cmake_path(SET _imgui_markdown_dir ${IMGUI_MARKDOWN_SOURCE_DIR})
 
   add_library(imgui_markdown INTERFACE)
-  target_sources(imgui_markdown INTERFACE FILE_SET imgui_markdown_set BASE_DIRS ${_immarkdown_dir} TYPE HEADERS FILES ${_immarkdown_dir}/imgui_markdown.h)
+  target_sources(imgui_markdown
+    INTERFACE FILE_SET imgui_markdown_set
+    BASE_DIRS ${_imgui_markdown_dir}
+    TYPE HEADERS
+    FILES ${_imgui_markdown_dir}/imgui_markdown.h)
 endif()
 
 if(implot)
@@ -123,18 +135,18 @@ if(imguifiledialog)
   if(NOT IMGUIFILEDIALOG_SOURCE_DIR)
     message(FATAL_ERROR "set IMGUIFILEDIALOG_SOURCE_DIR to proceed:\ne.g. cmake -DIMGUIFILEDIALOG_SOURCE_DIR=path.to.imguifiledialog...")
   endif()
-  cmake_path(SET _imfiledialog_dir ${IMGUIFILEDIALOG_SOURCE_DIR})
+  cmake_path(SET _imguifiledialog_dir ${IMGUIFILEDIALOG_SOURCE_DIR})
 
-  find_path(Dirent_PATH dirent.h PATHS ${_imfiledialog_dir} PATH_SUFFIXES dirent DOC "https://github.com/tronkko/dirent" NO_CACHE REQUIRED NO_DEFAULT_PATH NO_CMAKE_SYSTEM_PATH NO_CMAKE_FIND_ROOT_PATH)
-  find_path(stb_PATH std_image.h stb_image_resize2.h PATHS ${_imfiledialog_dir} PATH_SUFFIXES stb DOC "https://github.com/nothings/stb" NO_CACHE REQUIRED NO_DEFAULT_PATH NO_CMAKE_SYSTEM_PATH NO_CMAKE_FIND_ROOT_PATH)
+  find_path(Dirent_PATH dirent.h PATHS ${_imguifiledialog_dir} PATH_SUFFIXES dirent DOC "https://github.com/tronkko/dirent" NO_CACHE REQUIRED NO_DEFAULT_PATH NO_CMAKE_SYSTEM_PATH NO_CMAKE_FIND_ROOT_PATH)
+  find_path(stb_PATH std_image.h stb_image_resize2.h PATHS ${_imguifiledialog_dir} PATH_SUFFIXES stb DOC "https://github.com/nothings/stb" NO_CACHE REQUIRED NO_DEFAULT_PATH NO_CMAKE_SYSTEM_PATH NO_CMAKE_FIND_ROOT_PATH)
 
   add_library(imguifiledialog)
   target_sources(imguifiledialog
-    PRIVATE ${_imfiledialog_dir}/ImGuiFileDialog.cpp
+    PRIVATE ${_imguifiledialog_dir}/ImGuiFileDialog.cpp
     PUBLIC FILE_SET imguifiledialog_set
-    BASE_DIRS ${_imfiledialog_dir}
+    BASE_DIRS ${_imguifiledialog_dir}
     TYPE HEADERS
-    FILES ${_imfiledialog_dir}/ImGuiFileDialog.h ${_imfiledialog_dir}/ImGuiFileDialogConfig.h
+    FILES ${_imguifiledialog_dir}/ImGuiFileDialog.h ${_imguifiledialog_dir}/ImGuiFileDialogConfig.h
     PRIVATE FILE_SET HEADERS
     BASE_DIRS ${stb_PATH}
     FILES ${stb_PATH}/stb_image.h ${stb_PATH}/stb_image_resize2.h
@@ -170,7 +182,7 @@ if(install)
   if(imgui_markdown)
     install(EXPORT imgui_markdown_export DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/imgui_markdown NAMESPACE Unofficial::imgui_markdown:: FILE imgui_markdown-config.cmake EXPORT_PACKAGE_DEPENDENCIES)
     install(TARGETS imgui_markdown EXPORT imgui_markdown_export FILE_SET imgui_markdown_set)
-    install(FILES ${_immarkdown_dir}/License.txt DESTINATION ${CMAKE_INSTALL_DATADIR}/imgui_markdown)
+    install(FILES ${_imgui_markdown_dir}/License.txt DESTINATION ${CMAKE_INSTALL_DATADIR}/imgui_markdown)
   endif()
 
   if(implot)
@@ -188,8 +200,8 @@ if(install)
   if(imguifiledialog)
     install(EXPORT imguifiledialog_export DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/ImGuiFileDialog NAMESPACE Unofficial::ImGuiFileDialog:: FILE ImGuiFileDialogConfig.cmake EXPORT_PACKAGE_DEPENDENCIES)
     install(TARGETS imguifiledialog EXPORT imguifiledialog_export FILE_SET imguifiledialog_set)
-    install(FILES ${_imfiledialog_dir}/LICENSE DESTINATION ${CMAKE_INSTALL_DATADIR}/ImGuiFileDialog)
-    install(FILES ${_imfiledialog_dir}/Documentation.md DESTINATION ${CMAKE_INSTALL_DATADIR}/ImGuiFileDialog/docs)
+    install(FILES ${_imguifiledialog_dir}/LICENSE DESTINATION ${CMAKE_INSTALL_DATADIR}/ImGuiFileDialog)
+    install(FILES ${_imguifiledialog_dir}/Documentation.md DESTINATION ${CMAKE_INSTALL_DATADIR}/ImGuiFileDialog/docs)
   endif()
 endif()
 

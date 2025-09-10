@@ -9,7 +9,8 @@ So far following projects are supported:
 | [ImPlot](https://github.com/epezent/implot) | IMPLOT_SOURCE_DIR | implot | `Unofficial::ImPlot::ImPlot` |
 | [ImPlot3D](https://github.com/brenocq/implot3d) | IMPLOT3D_SOURCE_DIR | implot3d | `Unofficial::ImPlot3D::ImPlot3D` |
 | [ImGuiFileDialog](https://github.com/aiekick/ImGuiFileDialog) | IMGUIFILEDIALOG_SOURCE_DIR | imguifiledialog | `Unofficial::ImGuiFileDialog::ImGuiFileDialog` |
+| [ImGuizmo](https://github.com/CedricGuillemet/ImGuizmo) | IMGUIZMO_SOURCE_DIR | imguizmo | `Unofficial::ImGuizmo::ImGuizmo` |
 
 ---
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![GitHub Actions](https://github.com/adembudak/CMakeForImGuiThirdParties/actions/workflows/main.yml/badge.svg)](https://github.com/adembudak/CMakeForImGuiThirdParties/actions/workflows/main.yml) 
+[![GitHub Actions](https://github.com/adembudak/CMakeForImGuiThirdParties/actions/workflows/main.yml/badge.svg)](https://github.com/adembudak/CMakeForImGuiThirdParties/actions/workflows/main.yml)

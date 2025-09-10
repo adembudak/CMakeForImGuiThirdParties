@@ -26,6 +26,7 @@ option(imgui_markdown "https://github.com/enkisoftware/imgui_markdown" OFF)
 cmake_dependent_option(implot "https://github.com/epezent/implot" OFF ${DearImGui_VERSION} VERSION_GREATER 18900 OFF)
 cmake_dependent_option(implot3d "https://github.com/brenocq/implot3d" OFF ${DearImGui_VERSION} VERSION_GREATER 19000 OFF)
 cmake_dependent_option(imguifiledialog "https://github.com/aiekick/ImGuiFileDialog" OFF ${DearImGui_VERSION} VERSION_GREATER 19200 OFF)
+option(imguizmo "https://github.com/CedricGuillemet/ImGuizmo" OFF)
 
 cmake_dependent_option(imgui_memory_editor "" OFF imgui_club OFF)
 cmake_dependent_option(imgui_multicontext_compositor "" OFF "imgui_club AND (${DearImGui_VERSION} VERSION_GREATER 19080)" OFF)
@@ -148,6 +149,34 @@ if(imguifiledialog)
   target_link_libraries(ImGuiFileDialog PUBLIC ImGui::Core)
 endif()
 
+if(imguizmo)
+  if(NOT IMGUIZMO_SOURCE_DIR)
+    message(FATAL_ERROR "set IMGUIZMO_SOURCE_DIR to proceed:\ne.g. cmake -DIMGUIZMO_SOURCE_DIR=path.to.imguizmo...")
+  endif()
+  cmake_path(SET _imguizmo_dir ${IMGUIZMO_SOURCE_DIR})
+
+  add_library(ImGuizmo)
+  target_sources(ImGuizmo
+    PRIVATE
+      ${_imguizmo_dir}/GraphEditor.cpp
+      ${_imguizmo_dir}/ImCurveEdit.cpp
+      ${_imguizmo_dir}/ImGradient.cpp
+      ${_imguizmo_dir}/ImGuizmo.cpp
+      ${_imguizmo_dir}/ImSequencer.cpp
+    PUBLIC FILE_SET imguizmo_set
+    BASE_DIRS ${_imguizmo_dir}
+    TYPE HEADERS
+    FILES
+      ${_imguizmo_dir}/GraphEditor.h
+      ${_imguizmo_dir}/ImCurveEdit.h
+      ${_imguizmo_dir}/ImGradient.h
+      ${_imguizmo_dir}/ImGuizmo.h
+      ${_imguizmo_dir}/ImSequencer.h
+      ${_imguizmo_dir}/ImZoomSlider.h)
+  target_compile_features(ImGuizmo PRIVATE cxx_std_17)
+  target_link_libraries(ImGuizmo PUBLIC ImGui::Core)
+endif()
+
 if(install)
   set_property(GLOBAL PROPERTY INSTALL_PARALLEL ON)
 
@@ -181,6 +210,13 @@ if(install)
     install(FILES ${_imguifiledialog_dir}/LICENSE DESTINATION ${CMAKE_INSTALL_DATADIR}/ImGuiFileDialog)
     install(FILES ${_imguifiledialog_dir}/Documentation.md DESTINATION ${CMAKE_INSTALL_DATADIR}/ImGuiFileDialog/docs)
   endif()
+
+  if(imguizmo)
+    install(EXPORT imguizmo_export DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/ImGuizmo NAMESPACE Unofficial::ImGuizmo:: FILE ImGuizmoConfig.cmake EXPORT_PACKAGE_DEPENDENCIES)
+    install(TARGETS ImGuizmo EXPORT imguizmo_export FILE_SET imguizmo_set)
+    install(FILES ${_imguizmo_dir}/LICENSE DESTINATION ${CMAKE_INSTALL_DATADIR}/ImGuizmo)
+  endif()
+
 endif()
 
 if(uninstall)

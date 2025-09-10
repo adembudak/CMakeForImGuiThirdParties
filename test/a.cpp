@@ -1,3 +1,6 @@
+// clang-format off
+#include <imgui.h>
+
 #include <implot.h>
 #include <implot_internal.h>
 
@@ -12,5 +15,7 @@
 
 #include <ImGuiFileDialog.h>
 #include <ImGuiFileDialogConfig.h>
+
+#include <ImGuizmo.h>
 
 int main() {}

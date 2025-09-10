@@ -125,6 +125,13 @@ jobs:
           show-progress: false
           path: ImGuiFileDialog
 
+      - name: Checkout ImGuizmo
+        uses: actions/checkout@v5
+        with:
+          repository: CedricGuillemet/ImGuizmo
+          show-progress: false
+          path: ImGuizmo
+
       - name: Check out CMakeForImGuiThirdParties
         uses: actions/checkout@v5
         with:
@@ -149,6 +156,7 @@ jobs:
           -D imgui_markdown=ON -D IMGUI_MARKDOWN_SOURCE_DIR=$PWD/imgui_markdown
           -D implot3d=ON -D IMPLOT3D_SOURCE_DIR=$PWD/implot3d
           -D imguifiledialog=ON -D IMGUIFILEDIALOG_SOURCE_DIR=$PWD/ImGuiFileDialog
+          -D imguizmo=ON -D IMGUIZMO_SOURCE_DIR=$PWD/ImGuizmo
 
       - name: Build thirdparties
         run: >
@@ -182,6 +190,7 @@ jobs:
           -D ImPlot_DIR=${{ github.workspace }}/installed.in.there/lib/cmake/ImPlot
           -D ImPlot3D_DIR=${{ github.workspace }}/installed.in.there/lib/cmake/ImPlot3D
           -D ImGuiFileDialog_DIR=${{ github.workspace }}/installed.in.there/lib/cmake/ImGuiFileDialog
+          -D ImGuizmo_DIR=${{ github.workspace }}/installed.in.there/lib/cmake/ImGuizmo
 
       - name: Build test
         run:

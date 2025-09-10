@@ -95,14 +95,14 @@ if(implot)
   endif()
   cmake_path(SET _implot_dir ${IMPLOT_SOURCE_DIR})
 
-  add_library(implot)
-  target_sources(implot
+  add_library(ImPlot)
+  target_sources(ImPlot
     PRIVATE ${_implot_dir}/implot.cpp ${_implot_dir}/implot_items.cpp ${_implot_dir}/implot_demo.cpp
     PUBLIC FILE_SET implot_set
     BASE_DIRS ${_implot_dir}
     TYPE HEADERS
     FILES ${_implot_dir}/implot.h ${_implot_dir}/implot_internal.h)
-  target_link_libraries(implot PUBLIC ImGui::Core)
+  target_link_libraries(ImPlot PUBLIC ImGui::Core)
 endif()
 
 if(implot3d)
@@ -165,7 +165,7 @@ if(install)
 
   if(implot)
     install(EXPORT implot_export DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/ImPlot NAMESPACE Unofficial::ImPlot:: FILE ImPlotConfig.cmake EXPORT_PACKAGE_DEPENDENCIES)
-    install(TARGETS implot EXPORT implot_export FILE_SET implot_set)
+    install(TARGETS ImPlot EXPORT implot_export FILE_SET implot_set)
     install(FILES ${_implot_dir}/LICENSE DESTINATION ${CMAKE_INSTALL_DATADIR}/ImPlot)
   endif()
 

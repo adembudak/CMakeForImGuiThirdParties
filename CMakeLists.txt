@@ -130,8 +130,8 @@ if(imguifiledialog)
   find_path(Dirent_PATH dirent.h PATHS ${_imguifiledialog_dir} PATH_SUFFIXES dirent DOC "https://github.com/tronkko/dirent" NO_CACHE REQUIRED NO_DEFAULT_PATH NO_CMAKE_SYSTEM_PATH NO_CMAKE_FIND_ROOT_PATH)
   find_path(stb_PATH std_image.h stb_image_resize2.h PATHS ${_imguifiledialog_dir} PATH_SUFFIXES stb DOC "https://github.com/nothings/stb" NO_CACHE REQUIRED NO_DEFAULT_PATH NO_CMAKE_SYSTEM_PATH NO_CMAKE_FIND_ROOT_PATH)
 
-  add_library(imguifiledialog)
-  target_sources(imguifiledialog
+  add_library(ImGuiFileDialog)
+  target_sources(ImGuiFileDialog
     PRIVATE ${_imguifiledialog_dir}/ImGuiFileDialog.cpp
     PUBLIC FILE_SET imguifiledialog_set
     BASE_DIRS ${_imguifiledialog_dir}
@@ -143,9 +143,9 @@ if(imguifiledialog)
     PRIVATE FILE_SET HEADERS
     BASE_DIRS $<$<PLATFORM_ID:Windows>:${Dirent_PATH}>
     FILES $<$<PLATFORM_ID:Windows>:${Dirent_PATH}/dirent.h>)
-  target_compile_features(imguifiledialog PRIVATE cxx_std_17)
-  target_compile_definitions(imguifiledialog PRIVATE USE_STD_FILESYSTEM)
-  target_link_libraries(imguifiledialog PUBLIC ImGui::Core)
+  target_compile_features(ImGuiFileDialog PRIVATE cxx_std_17)
+  target_compile_definitions(ImGuiFileDialog PRIVATE USE_STD_FILESYSTEM)
+  target_link_libraries(ImGuiFileDialog PUBLIC ImGui::Core)
 endif()
 
 if(install)
@@ -177,7 +177,7 @@ if(install)
 
   if(imguifiledialog)
     install(EXPORT imguifiledialog_export DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/ImGuiFileDialog NAMESPACE Unofficial::ImGuiFileDialog:: FILE ImGuiFileDialogConfig.cmake EXPORT_PACKAGE_DEPENDENCIES)
-    install(TARGETS imguifiledialog EXPORT imguifiledialog_export FILE_SET imguifiledialog_set)
+    install(TARGETS ImGuiFileDialog EXPORT imguifiledialog_export FILE_SET imguifiledialog_set FILE_SET HEADERS)
     install(FILES ${_imguifiledialog_dir}/LICENSE DESTINATION ${CMAKE_INSTALL_DATADIR}/ImGuiFileDialog)
     install(FILES ${_imguifiledialog_dir}/Documentation.md DESTINATION ${CMAKE_INSTALL_DATADIR}/ImGuiFileDialog/docs)
   endif()

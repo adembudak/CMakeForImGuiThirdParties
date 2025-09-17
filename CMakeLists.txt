@@ -40,6 +40,13 @@ option(uninstall "A custom target 'uninstall' is generated to undo latest instal
 option(visualize_targets "A custom target 'graph' generated to visualize linkage graph" OFF)
 mark_as_advanced(FORCE visualize_targets)
 
+set(IMGUI_CLUB_SOURCE_DIR "" CACHE PATH "")
+set(IMGUI_MARKDOWN_SOURCE_DIR "" CACHE PATH "")
+set(IMPLOT_SOURCE_DIR "" CACHE PATH "")
+set(IMPLOT3D_SOURCE_DIR "" CACHE PATH "")
+set(IMGUIFILEDIALOG_SOURCE_DIR "" CACHE PATH "")
+set(IMGUIZMO_SOURCE_DIR "" CACHE PATH "")
+
 if(imgui_club)
   if(NOT IMGUI_CLUB_SOURCE_DIR)
     message(FATAL_ERROR "set IMGUI_CLUB_SOURCE_DIR to proceed:\ne.g. cmake -DIMGUI_CLUB_SOURCE_DIR=path.to.imgui_club ...")

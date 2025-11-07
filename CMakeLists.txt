@@ -23,10 +23,6 @@ cmake_dependent_option(implot3d "https://github.com/brenocq/implot3d" OFF ${Dear
 cmake_dependent_option(imguifiledialog "https://github.com/aiekick/ImGuiFileDialog" OFF ${DearImGui_VERSION} VERSION_GREATER 19200 OFF)
 option(imguizmo "https://github.com/CedricGuillemet/ImGuizmo" OFF)
 
-cmake_dependent_option(imgui_memory_editor "" OFF imgui_club OFF)
-cmake_dependent_option(imgui_multicontext_compositor "" OFF "imgui_club AND (${DearImGui_VERSION} VERSION_GREATER 19080)" OFF)
-cmake_dependent_option(imgui_threaded_rendering "" OFF imgui_club OFF)
-
 set(IMGUI_CLUB_SOURCE_DIR "" CACHE PATH "")
 set(IMGUI_MARKDOWN_SOURCE_DIR "" CACHE PATH "")
 set(IMPLOT_SOURCE_DIR "" CACHE PATH "")
@@ -42,30 +38,20 @@ if(imgui_club)
 
   add_library(imgui_club)
 
-  if(imgui_memory_editor)
-    target_sources(imgui_club
-      INTERFACE FILE_SET imgui_memory_editor_set
-      BASE_DIRS ${_imgui_club_dir}/imgui_memory_editor
-      TYPE HEADERS
-      FILES ${_imgui_club_dir}/imgui_memory_editor/imgui_memory_editor.h)
-  endif()
-
-  if(imgui_multicontext_compositor)
-    target_sources(imgui_club
-      PRIVATE ${_imgui_club_dir}/imgui_multicontext_compositor/imgui_multicontext_compositor.cpp
-      PUBLIC FILE_SET imgui_multicontext_compositor_set
-      BASE_DIRS ${_imgui_club_dir}/imgui_multicontext_compositor
-      TYPE HEADERS
-      FILES ${_imgui_club_dir}/imgui_multicontext_compositor/imgui_multicontext_compositor.h)
- endif()
-
-  if(imgui_threaded_rendering)
-    target_sources(imgui_club
-      INTERFACE FILE_SET imgui_threaded_rendering_set
-      BASE_DIRS ${_imgui_club_dir}/imgui_threaded_rendering
-      TYPE HEADERS
-      FILES ${_imgui_club_dir}/imgui_threaded_rendering/imgui_threaded_rendering.h)
-  endif()
+  target_sources(imgui_club
+    INTERFACE FILE_SET imgui_memory_editor_set
+    BASE_DIRS ${_imgui_club_dir}/imgui_memory_editor
+    TYPE HEADERS
+    FILES ${_imgui_club_dir}/imgui_memory_editor/imgui_memory_editor.h
+    PRIVATE ${_imgui_club_dir}/imgui_multicontext_compositor/imgui_multicontext_compositor.cpp # Dear ImGui version > 19080
+    PUBLIC FILE_SET imgui_multicontext_compositor_set
+    BASE_DIRS ${_imgui_club_dir}/imgui_multicontext_compositor
+    TYPE HEADERS
+    FILES ${_imgui_club_dir}/imgui_multicontext_compositor/imgui_multicontext_compositor.h
+    INTERFACE FILE_SET imgui_threaded_rendering_set
+    BASE_DIRS ${_imgui_club_dir}/imgui_threaded_rendering
+    TYPE HEADERS
+    FILES ${_imgui_club_dir}/imgui_threaded_rendering/imgui_threaded_rendering.h)
 
   target_link_libraries(imgui_club PUBLIC ImGui::Core)
 endif()

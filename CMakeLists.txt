@@ -12,11 +12,6 @@ include(CMakeDependentOption)
 include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
 
-get_property(is_generator_multi_config GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
-if(NOT is_generator_multi_config)
-  set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS Debug Release RelWithDebInfo MinSizeRel)
-endif()
-
 find_package(DearImGui CONFIG REQUIRED)
 
 message(STATUS "DearImGui Version ${DearImGui_VERSION}")
@@ -31,14 +26,6 @@ option(imguizmo "https://github.com/CedricGuillemet/ImGuizmo" OFF)
 cmake_dependent_option(imgui_memory_editor "" OFF imgui_club OFF)
 cmake_dependent_option(imgui_multicontext_compositor "" OFF "imgui_club AND (${DearImGui_VERSION} VERSION_GREATER 19080)" OFF)
 cmake_dependent_option(imgui_threaded_rendering "" OFF imgui_club OFF)
-
-option(BUILD_SHARED_LIBS "" OFF)
-
-option(install "Install the library" ON)
-option(uninstall "A custom target 'uninstall' is generated to undo latest install step" ON)
-
-option(visualize_targets "A custom target 'graph' generated to visualize linkage graph" OFF)
-mark_as_advanced(FORCE visualize_targets)
 
 set(IMGUI_CLUB_SOURCE_DIR "" CACHE PATH "")
 set(IMGUI_MARKDOWN_SOURCE_DIR "" CACHE PATH "")
@@ -184,83 +171,39 @@ if(imguizmo)
   target_link_libraries(ImGuizmo PUBLIC ImGui::Core)
 endif()
 
-if(install)
-  set_property(GLOBAL PROPERTY INSTALL_PARALLEL ON)
-
-  if(imgui_club)
-    install(EXPORT imgui_club_export DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/imgui_club NAMESPACE Unofficial::imgui_club:: FILE imgui_club-config.cmake EXPORT_PACKAGE_DEPENDENCIES)
-    install(TARGETS imgui_club EXPORT imgui_club_export FILE_SET imgui_threaded_rendering_set FILE_SET imgui_memory_editor_set FILE_SET imgui_multicontext_compositor_set)
-    install(FILES ${_imgui_club_dir}/LICENSE.txt DESTINATION ${CMAKE_INSTALL_DATADIR}/imgui_club)
-  endif()
-
-  if(imgui_markdown)
-    install(EXPORT imgui_markdown_export DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/imgui_markdown NAMESPACE Unofficial::imgui_markdown:: FILE imgui_markdown-config.cmake EXPORT_PACKAGE_DEPENDENCIES)
-    install(TARGETS imgui_markdown EXPORT imgui_markdown_export FILE_SET imgui_markdown_set)
-    install(FILES ${_imgui_markdown_dir}/License.txt DESTINATION ${CMAKE_INSTALL_DATADIR}/imgui_markdown)
-  endif()
-
-  if(implot)
-    install(EXPORT implot_export DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/ImPlot NAMESPACE Unofficial::ImPlot:: FILE ImPlotConfig.cmake EXPORT_PACKAGE_DEPENDENCIES)
-    install(TARGETS ImPlot EXPORT implot_export FILE_SET implot_set)
-    install(FILES ${_implot_dir}/LICENSE DESTINATION ${CMAKE_INSTALL_DATADIR}/ImPlot)
-  endif()
-
-  if(implot3d)
-    install(EXPORT implot3d_export DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/ImPlot3D NAMESPACE Unofficial::ImPlot3D:: FILE ImPlot3DConfig.cmake EXPORT_PACKAGE_DEPENDENCIES)
-    install(TARGETS ImPlot3D EXPORT implot3d_export FILE_SET implot3d_set)
-    install(FILES ${_implot3d_dir}/LICENSE DESTINATION ${CMAKE_INSTALL_DATADIR}/ImPlot3D)
-  endif()
-
-  if(imguifiledialog)
-    install(EXPORT imguifiledialog_export DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/ImGuiFileDialog NAMESPACE Unofficial::ImGuiFileDialog:: FILE ImGuiFileDialogConfig.cmake EXPORT_PACKAGE_DEPENDENCIES)
-    install(TARGETS ImGuiFileDialog EXPORT imguifiledialog_export FILE_SET imguifiledialog_set FILE_SET HEADERS)
-    install(FILES ${_imguifiledialog_dir}/LICENSE DESTINATION ${CMAKE_INSTALL_DATADIR}/ImGuiFileDialog)
-    install(FILES ${_imguifiledialog_dir}/Documentation.md DESTINATION ${CMAKE_INSTALL_DATADIR}/ImGuiFileDialog/docs)
-  endif()
-
-  if(imguizmo)
-    install(EXPORT imguizmo_export DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/ImGuizmo NAMESPACE Unofficial::ImGuizmo:: FILE ImGuizmoConfig.cmake EXPORT_PACKAGE_DEPENDENCIES)
-    install(TARGETS ImGuizmo EXPORT imguizmo_export FILE_SET imguizmo_set)
-    install(FILES ${_imguizmo_dir}/LICENSE DESTINATION ${CMAKE_INSTALL_DATADIR}/ImGuizmo)
-  endif()
-
+if(imgui_club)
+  install(EXPORT imgui_club_export DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/imgui_club NAMESPACE Unofficial::imgui_club:: FILE imgui_club-config.cmake EXPORT_PACKAGE_DEPENDENCIES)
+  install(TARGETS imgui_club EXPORT imgui_club_export FILE_SET imgui_threaded_rendering_set FILE_SET imgui_memory_editor_set FILE_SET imgui_multicontext_compositor_set)
+  install(FILES ${_imgui_club_dir}/LICENSE.txt DESTINATION ${CMAKE_INSTALL_DATADIR}/imgui_club)
 endif()
 
-if(uninstall)
-  file(CONFIGURE
-    OUTPUT cmake_uninstall.cmake
-    CONTENT
-[=[
-if(NOT EXISTS @PROJECT_BINARY_DIR@/install_manifest.txt)
-  message(FATAL_ERROR "Couldn't find @PROJECT_BINARY_DIR@/install_manifest.txt")
+if(imgui_markdown)
+  install(EXPORT imgui_markdown_export DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/imgui_markdown NAMESPACE Unofficial::imgui_markdown:: FILE imgui_markdown-config.cmake EXPORT_PACKAGE_DEPENDENCIES)
+  install(TARGETS imgui_markdown EXPORT imgui_markdown_export FILE_SET imgui_markdown_set)
+  install(FILES ${_imgui_markdown_dir}/License.txt DESTINATION ${CMAKE_INSTALL_DATADIR}/imgui_markdown)
 endif()
 
-file(STRINGS @PROJECT_BINARY_DIR@/install_manifest.txt files_to_uninstall)
-
-foreach(file IN LISTS files_to_uninstall)
-  execute_process(COMMAND @CMAKE_COMMAND@ -E rm $ENV{DESTDIR}${file} COMMAND_ECHO STDOUT)
-endforeach()
-]=] @ONLY)
-
-  add_custom_target(uninstall
-    COMMAND ${CMAKE_COMMAND} -P ${PROJECT_BINARY_DIR}/cmake_uninstall.cmake
-    WORKING_DIRECTORY ${PROJECT_BINARY_DIR})
+if(implot)
+  install(EXPORT implot_export DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/ImPlot NAMESPACE Unofficial::ImPlot:: FILE ImPlotConfig.cmake EXPORT_PACKAGE_DEPENDENCIES)
+  install(TARGETS ImPlot EXPORT implot_export FILE_SET implot_set)
+  install(FILES ${_implot_dir}/LICENSE DESTINATION ${CMAKE_INSTALL_DATADIR}/ImPlot)
 endif()
 
-if(visualize_targets)
-  if(NOT EXISTS ${PROJECT_BINARY_DIR}/CMakeGraphVizOptions.cmake)
-    file(WRITE ${PROJECT_BINARY_DIR}/CMakeGraphVizOptions.cmake
-[=[
-set(GRAPHVIZ_GENERATE_PER_TARGET FALSE)
-set(GRAPHVIZ_GENERATE_DEPENDERS FALSE)
-]=])
-  endif()
+if(implot3d)
+  install(EXPORT implot3d_export DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/ImPlot3D NAMESPACE Unofficial::ImPlot3D:: FILE ImPlot3DConfig.cmake EXPORT_PACKAGE_DEPENDENCIES)
+  install(TARGETS ImPlot3D EXPORT implot3d_export FILE_SET implot3d_set)
+  install(FILES ${_implot3d_dir}/LICENSE DESTINATION ${CMAKE_INSTALL_DATADIR}/ImPlot3D)
+endif()
 
-  find_program(DOT_COMMAND dot REQUIRED)
+if(imguifiledialog)
+  install(EXPORT imguifiledialog_export DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/ImGuiFileDialog NAMESPACE Unofficial::ImGuiFileDialog:: FILE ImGuiFileDialogConfig.cmake EXPORT_PACKAGE_DEPENDENCIES)
+  install(TARGETS ImGuiFileDialog EXPORT imguifiledialog_export FILE_SET imguifiledialog_set FILE_SET HEADERS)
+  install(FILES ${_imguifiledialog_dir}/LICENSE DESTINATION ${CMAKE_INSTALL_DATADIR}/ImGuiFileDialog)
+  install(FILES ${_imguifiledialog_dir}/Documentation.md DESTINATION ${CMAKE_INSTALL_DATADIR}/ImGuiFileDialog/docs)
+endif()
 
-  add_custom_target(graph
-    COMMAND ${CMAKE_COMMAND} --graphviz=targets.dot ${PROJECT_BINARY_DIR}
-    COMMAND ${DOT_COMMAND} -Tpng targets.dot -o targets.png
-    WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
-    VERBATIM)
+if(imguizmo)
+  install(EXPORT imguizmo_export DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/ImGuizmo NAMESPACE Unofficial::ImGuizmo:: FILE ImGuizmoConfig.cmake EXPORT_PACKAGE_DEPENDENCIES)
+  install(TARGETS ImGuizmo EXPORT imguizmo_export FILE_SET imguizmo_set)
+  install(FILES ${_imguizmo_dir}/LICENSE DESTINATION ${CMAKE_INSTALL_DATADIR}/ImGuizmo)
 endif()

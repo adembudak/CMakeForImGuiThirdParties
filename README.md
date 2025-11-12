@@ -1,4 +1,4 @@
-[CMake](https://cmake.org) build script support some thirdparty [Dear ImGui](https://github.com/ocornut/imgui) projects build with [CMakeForImGui](https://github.com/adembudak/CMakeForImGui).
+[CMake](https://cmake.org) build support some thirdparty [Dear ImGui](https://github.com/ocornut/imgui) projects build with [CMakeForImGui](https://github.com/adembudak/CMakeForImGui).
 
 So far following projects are supported:
 

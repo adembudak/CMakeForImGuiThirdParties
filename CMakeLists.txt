@@ -12,15 +12,15 @@ include(CMakeDependentOption)
 include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
 
-find_package(DearImGui CONFIG REQUIRED)
+find_package(ImGui CONFIG REQUIRED)
 
-message(STATUS "DearImGui Version ${DearImGui_VERSION}")
+message(STATUS "DearImGui Version ${ImGui_VERSION}")
 
 option(imgui_club "https://github.com/ocornut/imgui_club" OFF)
 option(imgui_markdown "https://github.com/enkisoftware/imgui_markdown" OFF)
-cmake_dependent_option(implot "https://github.com/epezent/implot" OFF ${DearImGui_VERSION} VERSION_GREATER 18900 OFF)
-cmake_dependent_option(implot3d "https://github.com/brenocq/implot3d" OFF ${DearImGui_VERSION} VERSION_GREATER 19000 OFF)
-cmake_dependent_option(imguifiledialog "https://github.com/aiekick/ImGuiFileDialog" OFF ${DearImGui_VERSION} VERSION_GREATER 19200 OFF)
+cmake_dependent_option(implot "https://github.com/epezent/implot" OFF ${ImGui_VERSION} VERSION_GREATER 18900 OFF)
+cmake_dependent_option(implot3d "https://github.com/brenocq/implot3d" OFF ${ImGui_VERSION} VERSION_GREATER 19000 OFF)
+cmake_dependent_option(imguifiledialog "https://github.com/aiekick/ImGuiFileDialog" OFF ${ImGui_VERSION} VERSION_GREATER 19200 OFF)
 option(imguizmo "https://github.com/CedricGuillemet/ImGuizmo" OFF)
 
 set(IMGUI_CLUB_SOURCE_DIR "" CACHE PATH "")
@@ -138,21 +138,24 @@ if(imguizmo)
   add_library(ImGuizmo)
   target_sources(ImGuizmo
     PRIVATE
-      ${_imguizmo_dir}/GraphEditor.cpp
-      ${_imguizmo_dir}/ImCurveEdit.cpp
-      ${_imguizmo_dir}/ImGradient.cpp
-      ${_imguizmo_dir}/ImGuizmo.cpp
-      ${_imguizmo_dir}/ImSequencer.cpp
+      ${_imguizmo_dir}/src/GraphEditor.cpp
+      ${_imguizmo_dir}/src/ImCurveEdit.cpp
+      ${_imguizmo_dir}/src/ImGradient.cpp
+      ${_imguizmo_dir}/src/ImGuizmo.cpp
+      ${_imguizmo_dir}/src/ImSequencer.cpp
+      ${_imguizmo_dir}/src/ImVectorEditor.cpp
     PUBLIC FILE_SET imguizmo_set
-    BASE_DIRS ${_imguizmo_dir}
+    BASE_DIRS ${_imguizmo_dir}/src
     TYPE HEADERS
     FILES
-      ${_imguizmo_dir}/GraphEditor.h
-      ${_imguizmo_dir}/ImCurveEdit.h
-      ${_imguizmo_dir}/ImGradient.h
-      ${_imguizmo_dir}/ImGuizmo.h
-      ${_imguizmo_dir}/ImSequencer.h
-      ${_imguizmo_dir}/ImZoomSlider.h)
+      ${_imguizmo_dir}/src/GraphEditor.h
+      ${_imguizmo_dir}/src/ImCurveEdit.h
+      ${_imguizmo_dir}/src/ImGradient.h
+      ${_imguizmo_dir}/src/ImGuizmo.h
+      ${_imguizmo_dir}/src/ImLightRig.h
+      ${_imguizmo_dir}/src/ImSequencer.h
+      ${_imguizmo_dir}/src/ImVectorEditor.h
+      ${_imguizmo_dir}/src/ImZoomSlider.h)
   target_compile_features(ImGuizmo PRIVATE cxx_std_17)
   target_link_libraries(ImGuizmo PUBLIC ImGui::Core)
 endif()

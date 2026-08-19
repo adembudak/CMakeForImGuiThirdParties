@@ -8,7 +8,6 @@ on:
     paths-ignore:
       - 'README.md'
       - 'LICENSE.md'
-      - '.github/depandabot.yml'
 
 jobs:
   Configure-Build-Install-Upload:
@@ -16,7 +15,7 @@ jobs:
       matrix:
           os:
             - ubuntu-latest
-            - macos-15
+            - macos-latest
             - windows-latest
 
           include:
@@ -24,12 +23,12 @@ jobs:
               generator: 'Unix Makefiles'
               triplet: x64-linux
 
-            - os: macos-15
+            - os: macos-latest
               generator: 'Ninja Multi-Config'
-              triplet: x64-osx
+              triplet: arm64-osx
 
             - os: windows-latest
-              generator: 'Visual Studio 17 2022'
+              generator: 'Visual Studio 18 2026'
               triplet: x64-windows
 
           build-type:
@@ -42,7 +41,7 @@ jobs:
       - name: Setup CMake
         uses: jwlawson/actions-setup-cmake@v2
         with:
-          cmake-version: '4.0.0'
+          cmake-version: '4.4.0'
 
       - name: Check out the Dear ImGui repository
         uses: actions/checkout@v5
@@ -149,7 +148,7 @@ jobs:
           -S ${{ github.workspace }}/CMakeForImGuiThirdParties
           -B ${{ github.workspace }}/build
           -G "${{ matrix.generator }}"
-          -D DearImGui_DIR=${{ github.workspace }}/installed.in.here/lib/cmake/DearImGui
+          -D ImGui_DIR=${{ github.workspace }}/installed.in.here/lib/cmake/ImGui
           -D CMAKE_INSTALL_PREFIX=${{ github.workspace }}/installed.in.there
           -D imgui_club=ON -D imgui_memory_editor=ON -D imgui_multicontext_compositor=ON -D imgui_threaded_rendering=ON -D IMGUI_CLUB_SOURCE_DIR=$PWD/imgui_club
           -D implot=ON -D IMPLOT_SOURCE_DIR=$PWD/implot
@@ -184,7 +183,7 @@ jobs:
           -S ${{ github.workspace }}/CMakeForImGuiThirdParties/test
           -B ${{ github.workspace }}/CMakeForImGuiThirdParties/test/build
           -G "${{ matrix.generator }}"
-          -D DearImGui_DIR=${{ github.workspace }}/installed.in.here/lib/cmake/DearImGui
+          -D ImGui_DIR=${{ github.workspace }}/installed.in.here/lib/cmake/ImGui
           -D imgui_club_DIR=${{ github.workspace }}/installed.in.there/lib/cmake/imgui_club
           -D imgui_markdown_DIR=${{ github.workspace }}/installed.in.there/lib/cmake/imgui_markdown
           -D ImPlot_DIR=${{ github.workspace }}/installed.in.there/lib/cmake/ImPlot

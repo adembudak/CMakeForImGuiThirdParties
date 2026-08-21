@@ -17,3 +17,5 @@ target_link_libraries(test
   PRIVATE Unofficial::imgui_club::imgui_club
   PRIVATE Unofficial::ImGuizmo::ImGuizmo
   PRIVATE Unofficial::ImGuiFileDialog::ImGuiFileDialog)
+
+install(TARGETS test)

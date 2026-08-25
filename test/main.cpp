@@ -20,4 +20,6 @@
 
 #include <TextEditor.h>
 
+#include <imfilebrowser.h>
+
 int main() {}

@@ -23,6 +23,7 @@ cmake_dependent_option(implot3d "https://github.com/brenocq/implot3d" OFF ${ImGu
 cmake_dependent_option(imguifiledialog "https://github.com/aiekick/ImGuiFileDialog" OFF ${ImGui_VERSION} VERSION_GREATER 19200 OFF)
 option(imguizmo "https://github.com/CedricGuillemet/ImGuizmo" OFF)
 option(imguicolortextedit "https://github.com/BalazsJako/ImGuiColorTextEdit" OFF)
+option(imguifilebrowser "https://github.com/AirGuanZ/imgui-filebrowser" OFF)
 
 set(IMGUI_CLUB_SOURCE_DIR "" CACHE PATH "")
 set(IMGUI_MARKDOWN_SOURCE_DIR "" CACHE PATH "")
@@ -31,6 +32,7 @@ set(IMPLOT3D_SOURCE_DIR "" CACHE PATH "")
 set(IMGUIFILEDIALOG_SOURCE_DIR "" CACHE PATH "")
 set(IMGUIZMO_SOURCE_DIR "" CACHE PATH "")
 set(IMGUICOLORTEXTEDIT_SOURCE_DIR "" CACHE PATH "")
+set(IMGUI_FILEBROWSER_SOURCE_DIR "" CACHE PATH "")
 
 if(imgui_club)
   if(NOT IMGUI_CLUB_SOURCE_DIR)
@@ -178,6 +180,20 @@ if(imguicolortextedit)
   target_link_libraries(ImGuiColorTextEdit PUBLIC ImGui::Core)
 endif()
 
+if(imguifilebrowser)
+  if(NOT IMGUI_FILEBROWSER_SOURCE_DIR)
+    message(FATAL_ERROR "set IMGUI_FILEBROWSER_SOURCE_DIR to proceed:\ne.g. cmake -DIMGUI_FILEBROWSER_SOURCE_DIR=path.to.imgui-filebrowser...")
+  endif()
+
+  add_library(imfilebrowser INTERFACE)
+  target_sources(imfilebrowser
+    INTERFACE FILE_SET HEADERS
+    BASE_DIRS ${IMGUI_FILEBROWSER_SOURCE_DIR}
+    FILES ${IMGUI_FILEBROWSER_SOURCE_DIR}/imfilebrowser.h)
+  target_compile_features(imfilebrowser INTERFACE cxx_std_17)
+  target_link_libraries(imfilebrowser INTERFACE ImGui::Core)
+endif()
+
 if(imgui_club)
   install(EXPORT imgui_club-targets DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/imgui_club NAMESPACE Unofficial::imgui_club:: FILE imgui_club-config.cmake EXPORT_PACKAGE_DEPENDENCIES)
   install(TARGETS imgui_club EXPORT imgui_club-targets FILE_SET imgui_threaded_rendering_set FILE_SET imgui_memory_editor_set FILE_SET imgui_multicontext_compositor_set)
@@ -219,4 +235,10 @@ if(imguicolortextedit)
   install(EXPORT imguicolortextedit-targets DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/ImGuiColorTextEdit NAMESPACE Unofficial::ImGuiColorTextEdit:: FILE ImGuiColorTextEditConfig.cmake EXPORT_PACKAGE_DEPENDENCIES)
   install(TARGETS ImGuiColorTextEdit EXPORT imguicolortextedit-targets FILE_SET imguicolortextedit_set)
   install(FILES ${_imguicolortextedit_dir}/LICENSE DESTINATION ${CMAKE_INSTALL_DATADIR}/ImGuiColorTextEdit)
+endif()
+
+if(imguifilebrowser)
+  install(EXPORT imfilebrowser-targets DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/imfilebrowser NAMESPACE Unofficial::imfilebrowser:: FILE imfilebrowser-config.cmake EXPORT_PACKAGE_DEPENDENCIES)
+  install(TARGETS imfilebrowser EXPORT imfilebrowser-targets FILE_SET HEADERS)
+  install(FILES ${IMGUI_FILEBROWSER_SOURCE_DIR}/LICENSE DESTINATION ${CMAKE_INSTALL_DATADIR}/imfilebrowser)
 endif()

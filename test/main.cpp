@@ -18,4 +18,6 @@
 
 #include <ImGuizmo.h>
 
+#include <TextEditor.h>
+
 int main() {}

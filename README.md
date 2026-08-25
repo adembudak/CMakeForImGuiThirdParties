@@ -10,6 +10,7 @@ So far following projects are supported:
 | [ImPlot3D](https://github.com/brenocq/implot3d) | IMPLOT3D_SOURCE_DIR | implot3d | `ImPlot3D` | `Unofficial::ImPlot3D::ImPlot3D` |
 | [ImGuiFileDialog](https://github.com/aiekick/ImGuiFileDialog) | IMGUIFILEDIALOG_SOURCE_DIR | imguifiledialog | `ImGuiFileDialog` | `Unofficial::ImGuiFileDialog::ImGuiFileDialog` |
 | [ImGuizmo](https://github.com/CedricGuillemet/ImGuizmo) | IMGUIZMO_SOURCE_DIR | imguizmo | `ImGuizmo` | `Unofficial::ImGuizmo::ImGuizmo` |
+| [imguicolortextedit](https://github.com/BalazsJako/ImGuiColorTextEdit) | IMGUICOLORTEXTEDIT_SOURCE_DIR | imguicolortextedit | `ImGuiColorTextEdit` | `Unofficial::ImGuiColorTextEdit::ImGuiColorTextEdit` |
 
 ---
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)

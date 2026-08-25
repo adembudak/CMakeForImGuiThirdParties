@@ -131,6 +131,13 @@ jobs:
           show-progress: false
           path: ImGuizmo
 
+      - name: Checkout ImGuiColorTextEdit
+        uses: actions/checkout@v5
+        with:
+          repository: BalazsJako/ImGuiColorTextEdit
+          show-progress: false
+          path: ImGuiColorTextEdit
+
       - name: Check out CMakeForImGuiThirdParties
         uses: actions/checkout@v5
         with:
@@ -156,6 +163,7 @@ jobs:
           -D implot3d=ON -D IMPLOT3D_SOURCE_DIR=$PWD/implot3d
           -D imguifiledialog=ON -D IMGUIFILEDIALOG_SOURCE_DIR=$PWD/ImGuiFileDialog
           -D imguizmo=ON -D IMGUIZMO_SOURCE_DIR=$PWD/ImGuizmo
+          -D imguicolortextedit=ON -D IMGUICOLORTEXTEDIT_SOURCE_DIR=$PWD/ImGuiColorTextEdit
 
       - name: Build thirdparties
         run: >
@@ -190,6 +198,7 @@ jobs:
           -D ImPlot3D_DIR=${{ github.workspace }}/installed.in.there/lib/cmake/ImPlot3D
           -D ImGuiFileDialog_DIR=${{ github.workspace }}/installed.in.there/lib/cmake/ImGuiFileDialog
           -D ImGuizmo_DIR=${{ github.workspace }}/installed.in.there/lib/cmake/ImGuizmo
+          -D ImGuiColorTextEdit_DIR=${{ github.workspace }}/installed.in.there/lib/cmake/ImGuiColorTextEdit
 
       - name: Build test
         run:

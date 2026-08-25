@@ -22,6 +22,7 @@ cmake_dependent_option(implot "https://github.com/epezent/implot" OFF ${ImGui_VE
 cmake_dependent_option(implot3d "https://github.com/brenocq/implot3d" OFF ${ImGui_VERSION} VERSION_GREATER 19000 OFF)
 cmake_dependent_option(imguifiledialog "https://github.com/aiekick/ImGuiFileDialog" OFF ${ImGui_VERSION} VERSION_GREATER 19200 OFF)
 option(imguizmo "https://github.com/CedricGuillemet/ImGuizmo" OFF)
+option(imguicolortextedit "https://github.com/BalazsJako/ImGuiColorTextEdit" OFF)
 
 set(IMGUI_CLUB_SOURCE_DIR "" CACHE PATH "")
 set(IMGUI_MARKDOWN_SOURCE_DIR "" CACHE PATH "")
@@ -29,6 +30,7 @@ set(IMPLOT_SOURCE_DIR "" CACHE PATH "")
 set(IMPLOT3D_SOURCE_DIR "" CACHE PATH "")
 set(IMGUIFILEDIALOG_SOURCE_DIR "" CACHE PATH "")
 set(IMGUIZMO_SOURCE_DIR "" CACHE PATH "")
+set(IMGUICOLORTEXTEDIT_SOURCE_DIR "" CACHE PATH "")
 
 if(imgui_club)
   if(NOT IMGUI_CLUB_SOURCE_DIR)
@@ -160,6 +162,22 @@ if(imguizmo)
   target_link_libraries(ImGuizmo PUBLIC ImGui::Core)
 endif()
 
+if(imguicolortextedit)
+  if(NOT IMGUICOLORTEXTEDIT_SOURCE_DIR)
+    message(FATAL_ERROR "set IMGUICOLORTEXTEDIT_SOURCE_DIR to proceed:\ne.g. cmake -DIMGUICOLORTEXTEDIT_SOURCE_DIR=path.to.imguicolortextedit...")
+  endif()
+  cmake_path(SET _imguicolortextedit_dir ${IMGUICOLORTEXTEDIT_SOURCE_DIR})
+
+  add_library(ImGuiColorTextEdit)
+  target_sources(ImGuiColorTextEdit
+    PRIVATE ${_imguicolortextedit_dir}/TextEditor.cpp
+    PUBLIC FILE_SET imguicolortextedit_set
+    BASE_DIRS ${_imguicolortextedit_dir}
+    TYPE HEADERS
+    FILES ${_imguicolortextedit_dir}/TextEditor.h)
+  target_link_libraries(ImGuiColorTextEdit PUBLIC ImGui::Core)
+endif()
+
 if(imgui_club)
   install(EXPORT imgui_club-targets DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/imgui_club NAMESPACE Unofficial::imgui_club:: FILE imgui_club-config.cmake EXPORT_PACKAGE_DEPENDENCIES)
   install(TARGETS imgui_club EXPORT imgui_club-targets FILE_SET imgui_threaded_rendering_set FILE_SET imgui_memory_editor_set FILE_SET imgui_multicontext_compositor_set)
@@ -195,4 +213,10 @@ if(imguizmo)
   install(EXPORT imguizmo-targets DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/ImGuizmo NAMESPACE Unofficial::ImGuizmo:: FILE ImGuizmoConfig.cmake EXPORT_PACKAGE_DEPENDENCIES)
   install(TARGETS ImGuizmo EXPORT imguizmo-targets FILE_SET imguizmo_set)
   install(FILES ${_imguizmo_dir}/LICENSE DESTINATION ${CMAKE_INSTALL_DATADIR}/ImGuizmo)
+endif()
+
+if(imguicolortextedit)
+  install(EXPORT imguicolortextedit-targets DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/ImGuiColorTextEdit NAMESPACE Unofficial::ImGuiColorTextEdit:: FILE ImGuiColorTextEditConfig.cmake EXPORT_PACKAGE_DEPENDENCIES)
+  install(TARGETS ImGuiColorTextEdit EXPORT imguicolortextedit-targets FILE_SET imguicolortextedit_set)
+  install(FILES ${_imguicolortextedit_dir}/LICENSE DESTINATION ${CMAKE_INSTALL_DATADIR}/ImGuiColorTextEdit)
 endif()

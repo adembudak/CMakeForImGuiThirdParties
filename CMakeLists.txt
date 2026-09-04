@@ -12,15 +12,11 @@ include(CMakeDependentOption)
 include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
 
-find_package(ImGui CONFIG REQUIRED)
-
-message(STATUS "DearImGui Version ${ImGui_VERSION}")
-
 option(imgui_club "https://github.com/ocornut/imgui_club" OFF)
 option(imgui_markdown "https://github.com/enkisoftware/imgui_markdown" OFF)
-cmake_dependent_option(implot "https://github.com/epezent/implot" OFF ${ImGui_VERSION} VERSION_GREATER 18900 OFF)
-cmake_dependent_option(implot3d "https://github.com/brenocq/implot3d" OFF ${ImGui_VERSION} VERSION_GREATER 19000 OFF)
-cmake_dependent_option(imguifiledialog "https://github.com/aiekick/ImGuiFileDialog" OFF ${ImGui_VERSION} VERSION_GREATER 19200 OFF)
+option(implot "https://github.com/epezent/implot" OFF) # requires imgui > 1.89.0
+option(implot3d "https://github.com/brenocq/implot3d" OFF) # requires imgui > 1.90.0
+option(imguifiledialog "https://github.com/aiekick/ImGuiFileDialog" OFF) # requires imgui > 1.92.0
 option(imguizmo "https://github.com/CedricGuillemet/ImGuizmo" OFF)
 option(imguicolortextedit "https://github.com/BalazsJako/ImGuiColorTextEdit" OFF)
 option(imguifilebrowser "https://github.com/AirGuanZ/imgui-filebrowser" OFF)
@@ -41,7 +37,6 @@ if(imgui_club)
   cmake_path(SET _imgui_club_dir ${IMGUI_CLUB_SOURCE_DIR})
 
   add_library(imgui_club)
-
   target_sources(imgui_club
     INTERFACE FILE_SET imgui_memory_editor_set
     BASE_DIRS ${_imgui_club_dir}/imgui_memory_editor
@@ -57,6 +52,7 @@ if(imgui_club)
     TYPE HEADERS
     FILES ${_imgui_club_dir}/imgui_threaded_rendering/imgui_threaded_rendering.h)
 
+  find_package(ImGui CONFIG REQUIRED)
   target_link_libraries(imgui_club PUBLIC ImGui::Core)
 endif()
 
@@ -68,10 +64,12 @@ if(imgui_markdown)
 
   add_library(imgui_markdown INTERFACE)
   target_sources(imgui_markdown
-    INTERFACE FILE_SET imgui_markdown_set
+    INTERFACE FILE_SET HEADERS
     BASE_DIRS ${_imgui_markdown_dir}
-    TYPE HEADERS
     FILES ${_imgui_markdown_dir}/imgui_markdown.h)
+
+  find_package(ImGui CONFIG REQUIRED)
+  target_link_libraries(imgui_markdown INTERFACE ImGui::Core)
 endif()
 
 if(implot)
@@ -87,6 +85,8 @@ if(implot)
     BASE_DIRS ${_implot_dir}
     TYPE HEADERS
     FILES ${_implot_dir}/implot.h ${_implot_dir}/implot_internal.h)
+
+  find_package(ImGui CONFIG REQUIRED)
   target_link_libraries(ImPlot PUBLIC ImGui::Core)
 endif()
 
@@ -103,6 +103,8 @@ if(implot3d)
     BASE_DIRS ${_implot3d_dir}
     TYPE HEADERS
     FILES ${_implot3d_dir}/implot3d.h ${_implot3d_dir}/implot3d_internal.h)
+
+  find_package(ImGui CONFIG REQUIRED)
   target_link_libraries(ImPlot3D PUBLIC ImGui::Core)
 endif()
 
@@ -130,6 +132,8 @@ if(imguifiledialog)
     FILES $<$<PLATFORM_ID:Windows>:${Dirent_PATH}/dirent.h>)
   target_compile_features(ImGuiFileDialog PRIVATE cxx_std_17)
   target_compile_definitions(ImGuiFileDialog PRIVATE USE_STD_FILESYSTEM)
+
+  find_package(ImGui CONFIG REQUIRED)
   target_link_libraries(ImGuiFileDialog PUBLIC ImGui::Core)
 endif()
 
@@ -161,6 +165,8 @@ if(imguizmo)
       ${_imguizmo_dir}/src/ImVectorEditor.h
       ${_imguizmo_dir}/src/ImZoomSlider.h)
   target_compile_features(ImGuizmo PRIVATE cxx_std_17)
+
+  find_package(ImGui CONFIG REQUIRED)
   target_link_libraries(ImGuizmo PUBLIC ImGui::Core)
 endif()
 
@@ -177,6 +183,8 @@ if(imguicolortextedit)
     BASE_DIRS ${_imguicolortextedit_dir}
     TYPE HEADERS
     FILES ${_imguicolortextedit_dir}/TextEditor.h)
+
+  find_package(ImGui CONFIG REQUIRED)
   target_link_libraries(ImGuiColorTextEdit PUBLIC ImGui::Core)
 endif()
 
@@ -191,6 +199,8 @@ if(imguifilebrowser)
     BASE_DIRS ${IMGUI_FILEBROWSER_SOURCE_DIR}
     FILES ${IMGUI_FILEBROWSER_SOURCE_DIR}/imfilebrowser.h)
   target_compile_features(imfilebrowser INTERFACE cxx_std_17)
+
+  find_package(ImGui CONFIG REQUIRED)
   target_link_libraries(imfilebrowser INTERFACE ImGui::Core)
 endif()
 
@@ -202,7 +212,7 @@ endif()
 
 if(imgui_markdown)
   install(EXPORT imgui_markdown-targets DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/imgui_markdown NAMESPACE Unofficial::imgui_markdown:: FILE imgui_markdown-config.cmake EXPORT_PACKAGE_DEPENDENCIES)
-  install(TARGETS imgui_markdown EXPORT imgui_markdown-targets FILE_SET imgui_markdown_set)
+  install(TARGETS imgui_markdown EXPORT imgui_markdown-targets FILE_SET HEADERS)
   install(FILES ${_imgui_markdown_dir}/License.txt DESTINATION ${CMAKE_INSTALL_DATADIR}/imgui_markdown)
 endif()
 

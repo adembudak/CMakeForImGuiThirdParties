@@ -20,6 +20,7 @@ option(imguifiledialog "https://github.com/aiekick/ImGuiFileDialog" OFF) # requi
 option(imguizmo "https://github.com/CedricGuillemet/ImGuizmo" OFF)
 option(imguicolortextedit "https://github.com/BalazsJako/ImGuiColorTextEdit" OFF)
 option(imguifilebrowser "https://github.com/AirGuanZ/imgui-filebrowser" OFF)
+option(imgui-node-editor "https://github.com/thedmd/imgui-node-editor" OFF)
 
 set(IMGUI_CLUB_SOURCE_DIR "" CACHE PATH "")
 set(IMGUI_MARKDOWN_SOURCE_DIR "" CACHE PATH "")
@@ -29,6 +30,7 @@ set(IMGUIFILEDIALOG_SOURCE_DIR "" CACHE PATH "")
 set(IMGUIZMO_SOURCE_DIR "" CACHE PATH "")
 set(IMGUICOLORTEXTEDIT_SOURCE_DIR "" CACHE PATH "")
 set(IMGUI_FILEBROWSER_SOURCE_DIR "" CACHE PATH "")
+set(IMGUI_NODE_EDITOR_SOURCE_DIR "" CACHE PATH "")
 
 if(imgui_club)
   if(NOT IMGUI_CLUB_SOURCE_DIR)
@@ -204,6 +206,38 @@ if(imguifilebrowser)
   target_link_libraries(imfilebrowser INTERFACE ImGui::Core)
 endif()
 
+if(imgui-node-editor)
+  if(NOT IMGUI_NODE_EDITOR_SOURCE_DIR)
+    message(FATAL_ERROR "set IMGUI_NODE_EDITOR_SOURCE_DIR to proceed:\ne.g. cmake -DIMGUI_NODE_EDITOR_SOURCE_DIR=path.to.imgui-node-editor ...")
+  endif()
+  cmake_path(SET _imgui_node_editor_dir ${IMGUI_NODE_EDITOR_SOURCE_DIR})
+
+  add_library(imgui_node_editor)
+  target_sources(imgui_node_editor
+    PRIVATE
+      ${_imgui_node_editor_dir}/imgui_node_editor.cpp
+      ${_imgui_node_editor_dir}/imgui_canvas.cpp
+      ${_imgui_node_editor_dir}/imgui_node_editor_api.cpp
+      ${_imgui_node_editor_dir}/crude_json.cpp
+    PUBLIC FILE_SET imgui_node_editor_set
+    BASE_DIRS ${_imgui_node_editor_dir}
+    TYPE HEADERS
+    FILES
+     ${_imgui_node_editor_dir}/imgui_node_editor.h
+     ${_imgui_node_editor_dir}/imgui_canvas.h
+     ${_imgui_node_editor_dir}/imgui_bezier_math.h
+     ${_imgui_node_editor_dir}/imgui_bezier_math.inl
+     ${_imgui_node_editor_dir}/imgui_extra_math.h
+     ${_imgui_node_editor_dir}/imgui_extra_math.inl
+     ${_imgui_node_editor_dir}/imgui_node_editor_internal.h
+     ${_imgui_node_editor_dir}/imgui_node_editor_internal.inl
+     ${_imgui_node_editor_dir}/crude_json.h)
+  target_compile_features(imgui_node_editor PRIVATE cxx_std_17)
+
+  find_package(ImGui 19100 EXACT CONFIG REQUIRED)
+  target_link_libraries(imgui_node_editor PUBLIC ImGui::Core)
+endif()
+
 if(imgui_club)
   install(EXPORT imgui_club-targets DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/imgui_club NAMESPACE Unofficial::imgui_club:: FILE imgui_club-config.cmake EXPORT_PACKAGE_DEPENDENCIES)
   install(TARGETS imgui_club EXPORT imgui_club-targets FILE_SET imgui_threaded_rendering_set FILE_SET imgui_memory_editor_set FILE_SET imgui_multicontext_compositor_set)
@@ -251,4 +285,10 @@ if(imguifilebrowser)
   install(EXPORT imfilebrowser-targets DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/imfilebrowser NAMESPACE Unofficial::imfilebrowser:: FILE imfilebrowser-config.cmake EXPORT_PACKAGE_DEPENDENCIES)
   install(TARGETS imfilebrowser EXPORT imfilebrowser-targets FILE_SET HEADERS)
   install(FILES ${IMGUI_FILEBROWSER_SOURCE_DIR}/LICENSE DESTINATION ${CMAKE_INSTALL_DATADIR}/imfilebrowser)
+endif()
+
+if(imgui-node-editor)
+  install(EXPORT imgui_node_editor-targets DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/imgui-node-editor NAMESPACE Unofficial::imgui_node_editor:: FILE imgui-node-editor-config.cmake EXPORT_PACKAGE_DEPENDENCIES)
+  install(TARGETS imgui_node_editor EXPORT imgui_node_editor-targets FILE_SET imgui_node_editor_set)
+  install(FILES ${IMGUI_NODE_EDITOR_SOURCE_DIR}/LICENSE DESTINATION ${CMAKE_INSTALL_DATADIR}/imgui-node-editor)
 endif()

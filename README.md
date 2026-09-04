@@ -12,6 +12,7 @@ So far following projects are supported:
 | [ImGuizmo](https://github.com/CedricGuillemet/ImGuizmo) | IMGUIZMO_SOURCE_DIR | imguizmo | `ImGuizmo` | `Unofficial::ImGuizmo::ImGuizmo` |
 | [imguicolortextedit](https://github.com/BalazsJako/ImGuiColorTextEdit) | IMGUICOLORTEXTEDIT_SOURCE_DIR | imguicolortextedit | `ImGuiColorTextEdit` | `Unofficial::ImGuiColorTextEdit::ImGuiColorTextEdit` |
 | [imgui-filebrowser](https://github.com/AirGuanZ/imgui-filebrowser) | IMGUI_FILEBROWSER_SOURCE_DIR | imguifilebrowser | `imfilebrowser` | `Unofficial::imfilebrowser::imfilebrowser` |
+| [imgui-node-editor](https://github.com/thedmd/imgui-node-editor) | IMGUI_NODE_EDITOR_SOURCE_DIR | imgui-node-editor | `imgui-node-editor` | `Unofficial::imgui_node_editor::imgui_node_editor` |
 
 ---
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)

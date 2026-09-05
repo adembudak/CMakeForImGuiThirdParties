@@ -8,9 +8,7 @@ project(CMakeForImGuiThirdParties
 
 set(CMAKE_EXPERIMENTAL_EXPORT_PACKAGE_DEPENDENCIES "1942b4fa-b2c5-4546-9385-83f254070067")
 
-include(CMakeDependentOption)
 include(GNUInstallDirs)
-include(CMakePackageConfigHelpers)
 
 option(imgui_club "https://github.com/ocornut/imgui_club" OFF)
 option(imgui_markdown "https://github.com/enkisoftware/imgui_markdown" OFF)

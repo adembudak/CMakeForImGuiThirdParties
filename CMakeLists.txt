@@ -232,7 +232,7 @@ if(imgui-node-editor)
      ${_imgui_node_editor_dir}/crude_json.h)
   target_compile_features(imgui_node_editor PRIVATE cxx_std_17)
 
-  find_package(ImGui 19100 EXACT CONFIG REQUIRED)
+  find_package(ImGui 1.91.0 EXACT CONFIG REQUIRED)
   target_link_libraries(imgui_node_editor PUBLIC ImGui::Core)
 endif()
 

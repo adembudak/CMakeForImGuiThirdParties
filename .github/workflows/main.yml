@@ -41,7 +41,7 @@ jobs:
       - name: Setup CMake
         uses: jwlawson/actions-setup-cmake@v2
         with:
-          cmake-version: '4.4.0'
+          cmake-version: '4.4.5'
 
       - name: Check out the Dear ImGui repository
         uses: actions/checkout@v5
@@ -145,6 +145,13 @@ jobs:
           show-progress: false
           path: imgui-filebrowser
 
+      - name: Checkout imgui-node-editor
+        uses: actions/checkout@v5
+        with:
+          repository: thedmd/imgui-node-editor
+          show-progress: false
+          path: imgui-node-editor
+
       - name: Check out CMakeForImGuiThirdParties
         uses: actions/checkout@v5
         with:
@@ -172,6 +179,7 @@ jobs:
           -D imguizmo=ON -D IMGUIZMO_SOURCE_DIR=$PWD/ImGuizmo
           -D imguicolortextedit=ON -D IMGUICOLORTEXTEDIT_SOURCE_DIR=$PWD/ImGuiColorTextEdit
           -D imguifilebrowser=ON -D IMGUI_FILEBROWSER_SOURCE_DIR=$PWD/imgui-filebrowser
+          -D imgui-node-editor=ON -D IMGUI_NODE_EDITOR_SOURCE_DIR=$PWD/imgui-node-editor
 
       - name: Build thirdparties
         run: >

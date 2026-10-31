@@ -216,6 +216,7 @@ jobs:
           -D ImGuizmo_DIR=${{ github.workspace }}/installed.in.there/lib/cmake/ImGuizmo
           -D ImGuiColorTextEdit_DIR=${{ github.workspace }}/installed.in.there/lib/cmake/ImGuiColorTextEdit
           -D imfilebrowser_DIR=${{ github.workspace }}/installed.in.there/lib/cmake/imfilebrowser
+          -D imgui-node-editor_DIR=${{ github.workspace }}/installed.in.there/lib/cmake/imgui-node-editor
 
       - name: Build test
         run:

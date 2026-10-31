@@ -22,4 +22,6 @@
 
 #include <imfilebrowser.h>
 
+#include <imgui_node_editor.h>
+
 int main() {}

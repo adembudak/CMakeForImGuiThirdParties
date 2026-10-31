@@ -10,6 +10,7 @@ find_package(ImGuiFileDialog CONFIG REQUIRED)
 find_package(ImGuizmo CONFIG REQUIRED)
 find_package(ImGuiColorTextEdit CONFIG REQUIRED)
 find_package(imfilebrowser CONFIG REQUIRED)
+find_package(imgui-node-editor CONFIG REQUIRED)
 
 add_executable(test main.cpp)
 target_link_libraries(test
@@ -20,6 +21,7 @@ target_link_libraries(test
   PRIVATE Unofficial::ImGuizmo::ImGuizmo
   PRIVATE Unofficial::ImGuiFileDialog::ImGuiFileDialog
   PRIVATE Unofficial::ImGuiColorTextEdit::ImGuiColorTextEdit
-  PRIVATE Unofficial::imfilebrowser::imfilebrowser)
+  PRIVATE Unofficial::imfilebrowser::imfilebrowser
+  PRIVATE Unofficial::imgui_node_editor::imgui_node_editor)
 
 install(TARGETS test)

@@ -30,6 +30,8 @@ set(IMGUICOLORTEXTEDIT_SOURCE_DIR "" CACHE PATH "")
 set(IMGUI_FILEBROWSER_SOURCE_DIR "" CACHE PATH "")
 set(IMGUI_NODE_EDITOR_SOURCE_DIR "" CACHE PATH "")
 
+find_package(ImGui CONFIG REQUIRED)
+
 if(imgui_club)
   if(NOT IMGUI_CLUB_SOURCE_DIR)
     message(FATAL_ERROR "set IMGUI_CLUB_SOURCE_DIR to proceed:\ne.g. cmake -DIMGUI_CLUB_SOURCE_DIR=path.to.imgui_club ...")
@@ -51,8 +53,6 @@ if(imgui_club)
     BASE_DIRS ${_imgui_club_dir}/imgui_threaded_rendering
     TYPE HEADERS
     FILES ${_imgui_club_dir}/imgui_threaded_rendering/imgui_threaded_rendering.h)
-
-  find_package(ImGui CONFIG REQUIRED)
   target_link_libraries(imgui_club PUBLIC ImGui::Core)
 endif()
 
@@ -67,8 +67,6 @@ if(imgui_markdown)
     INTERFACE FILE_SET HEADERS
     BASE_DIRS ${_imgui_markdown_dir}
     FILES ${_imgui_markdown_dir}/imgui_markdown.h)
-
-  find_package(ImGui CONFIG REQUIRED)
   target_link_libraries(imgui_markdown INTERFACE ImGui::Core)
 endif()
 
@@ -85,8 +83,6 @@ if(implot)
     BASE_DIRS ${_implot_dir}
     TYPE HEADERS
     FILES ${_implot_dir}/implot.h ${_implot_dir}/implot_internal.h)
-
-  find_package(ImGui CONFIG REQUIRED)
   target_link_libraries(ImPlot PUBLIC ImGui::Core)
 endif()
 
@@ -103,8 +99,6 @@ if(implot3d)
     BASE_DIRS ${_implot3d_dir}
     TYPE HEADERS
     FILES ${_implot3d_dir}/implot3d.h ${_implot3d_dir}/implot3d_internal.h)
-
-  find_package(ImGui CONFIG REQUIRED)
   target_link_libraries(ImPlot3D PUBLIC ImGui::Core)
 endif()
 
@@ -132,8 +126,6 @@ if(imguifiledialog)
     FILES $<$<PLATFORM_ID:Windows>:${Dirent_PATH}/dirent.h>)
   target_compile_features(ImGuiFileDialog PRIVATE cxx_std_17)
   target_compile_definitions(ImGuiFileDialog PRIVATE USE_STD_FILESYSTEM)
-
-  find_package(ImGui CONFIG REQUIRED)
   target_link_libraries(ImGuiFileDialog PUBLIC ImGui::Core)
 endif()
 
@@ -165,8 +157,6 @@ if(imguizmo)
       ${_imguizmo_dir}/src/ImVectorEditor.h
       ${_imguizmo_dir}/src/ImZoomSlider.h)
   target_compile_features(ImGuizmo PRIVATE cxx_std_17)
-
-  find_package(ImGui CONFIG REQUIRED)
   target_link_libraries(ImGuizmo PUBLIC ImGui::Core)
 endif()
 
@@ -183,8 +173,6 @@ if(imguicolortextedit)
     BASE_DIRS ${_imguicolortextedit_dir}
     TYPE HEADERS
     FILES ${_imguicolortextedit_dir}/TextEditor.h)
-
-  find_package(ImGui CONFIG REQUIRED)
   target_link_libraries(ImGuiColorTextEdit PUBLIC ImGui::Core)
 endif()
 
@@ -199,8 +187,6 @@ if(imguifilebrowser)
     BASE_DIRS ${IMGUI_FILEBROWSER_SOURCE_DIR}
     FILES ${IMGUI_FILEBROWSER_SOURCE_DIR}/imfilebrowser.h)
   target_compile_features(imfilebrowser INTERFACE cxx_std_17)
-
-  find_package(ImGui CONFIG REQUIRED)
   target_link_libraries(imfilebrowser INTERFACE ImGui::Core)
 endif()
 
@@ -231,8 +217,6 @@ if(imgui-node-editor)
      ${_imgui_node_editor_dir}/imgui_node_editor_internal.inl
      ${_imgui_node_editor_dir}/crude_json.h)
   target_compile_features(imgui_node_editor PRIVATE cxx_std_17)
-
-  find_package(ImGui CONFIG REQUIRED)
   target_link_libraries(imgui_node_editor PUBLIC ImGui::Core)
 endif()
 

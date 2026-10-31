@@ -44,14 +44,14 @@ jobs:
           cmake-version: '4.4.5'
 
       - name: Check out the Dear ImGui repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
         with:
           repository: ocornut/imgui
           show-progress: false
           path: imgui
 
       - name: Check out CMakeForImGui
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
         with:
           repository: adembudak/CMakeForImGui
           show-progress: false
@@ -90,70 +90,70 @@ jobs:
         run: cmake -E rm -rf build
 
       - name: Checkout imgui_club
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
         with:
           repository: ocornut/imgui_club
           show-progress: false
           path: imgui_club
 
       - name: Checkout imgui_markdown
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
         with:
           repository: enkisoftware/imgui_markdown
           show-progress: false
           path: imgui_markdown
 
       - name: Checkout ImPlot
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
         with:
           repository: epezent/implot
           show-progress: false
           path: implot
 
       - name: Checkout ImPlot3D
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
         with:
           repository: brenocq/implot3d
           show-progress: false
           path: implot3d
 
       - name: Checkout ImGuiFileDialog
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
         with:
           repository: aiekick/ImGuiFileDialog
           show-progress: false
           path: ImGuiFileDialog
 
       - name: Checkout ImGuizmo
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
         with:
           repository: CedricGuillemet/ImGuizmo
           show-progress: false
           path: ImGuizmo
 
       - name: Checkout ImGuiColorTextEdit
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
         with:
           repository: BalazsJako/ImGuiColorTextEdit
           show-progress: false
           path: ImGuiColorTextEdit
 
       - name: Checkout imgui-filebrowser
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
         with:
           repository: AirGuanZ/imgui-filebrowser
           show-progress: false
           path: imgui-filebrowser
 
       - name: Checkout imgui-node-editor
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
         with:
           repository: thedmd/imgui-node-editor
           show-progress: false
           path: imgui-node-editor
 
       - name: Check out CMakeForImGuiThirdParties
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
         with:
           repository: ${{ github.repository }}
           show-progress: false
@@ -223,7 +223,7 @@ jobs:
           cmake --build ${{ github.workspace }}/CMakeForImGuiThirdParties/test/build --config ${{ matrix.build-type }}
 
       - name: Upload
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
 
         with:
           name: build.imgui-${{ matrix.tag }}.${{ matrix.os }}.${{ matrix.triplet }}.${{ matrix.build-type }}
